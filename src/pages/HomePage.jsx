@@ -14,7 +14,7 @@ export default function HomePage() {
           title="Pirograbador hecho en Chile"
           subtitle="15 años fabricando la herramienta que usan artesanos de Arica a Punta Arenas. Madera, cuero y plumavit, con potencia regulable."
           ctaText="Ver el producto"
-          ctaHref="#productos"
+          ctaTo="/#productos"
         />
         <ProductsSection product={product} />
         <ContactSection />

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import logo from "../../assets/logo.webp";
 import "./Navbar.css";
 
-const base = import.meta.env.BASE_URL;
-
 const links = [
-  { label: "Producto", href: `${base}#productos` },
-  { label: "Contacto", href: `${base}#contacto` },
+  { label: "Producto", to: "/#productos" },
+  { label: "Contacto", to: "/#contacto" },
 ];
 
 export default function Navbar() {
@@ -33,13 +32,13 @@ export default function Navbar() {
           </span>
           <nav>
             {links.map((link) => (
-              <a key={link.href} href={link.href}>
+              <Link key={link.to} to={link.to}>
                 {link.label}
-              </a>
+              </Link>
             ))}
-            <a className="nav-garantia" href={`${base}#/garantia`}>
+            <Link className="nav-garantia" to="/garantia">
               Garantía
-            </a>
+            </Link>
           </nav>
         </div>
       </header>

@@ -4,11 +4,11 @@
     <meta charset="UTF-8" />
     <script>
       (function () {
-        var segments = window.location.pathname.split("/").filter(Boolean);
-        var root = segments.length ? "/" + segments[0] + "/" : "/";
+        var base = "/pirografoschilenos/";
+        var path = window.location.pathname;
         var route =
-          segments[segments.length - 1] === "garantia" ? "#/garantia" : "";
-        window.location.replace(root + route);
+          path.indexOf(base) === 0 ? path.slice(base.length - 1) : path;
+        window.location.replace(base + "?p=" + encodeURIComponent(route));
       })();
     </script>
   </head>

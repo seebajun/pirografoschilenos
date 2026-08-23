@@ -1,6 +1,7 @@
+import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import Footer from "../components/Footer/Footer.jsx";
-import { whatsappLink } from "../data/contact.js";
+import WhatsAppButton from "../components/WhatsAppButton/WhatsAppButton.jsx";
 import "./GuaranteePage.css";
 
 const cubre = [
@@ -24,9 +25,9 @@ export default function GuaranteePage() {
       <Navbar />
       <main className="garantia">
         <div className="wrap">
-          <a className="volver" href={import.meta.env.BASE_URL}>
+          <Link className="volver" to="/">
             ← Volver al inicio
-          </a>
+          </Link>
           <h1>Garantía real de 1 año</h1>
           <p className="lead">
             Llevamos más de 15 años fabricando y jamás hemos tenido una
@@ -60,16 +61,9 @@ export default function GuaranteePage() {
           </div>
 
           <div className="cta-row">
-            <a
-              className="btn"
-              target="_blank"
-              rel="noreferrer"
-              href={whatsappLink(
-                "Hola, necesito hacer valer la garantía de mi pirograbador"
-              )}
-            >
+            <WhatsAppButton message="Hola, necesito hacer valer la garantía de mi pirograbador">
               Hacer valer mi garantía
-            </a>
+            </WhatsAppButton>
           </div>
         </div>
       </main>

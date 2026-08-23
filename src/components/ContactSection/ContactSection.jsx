@@ -1,4 +1,4 @@
-import { whatsappLink } from "../../data/contact.js";
+import WhatsAppButton from "../WhatsAppButton/WhatsAppButton.jsx";
 import "./ContactSection.css";
 
 export default function ContactSection() {
@@ -11,16 +11,9 @@ export default function ContactSection() {
           electrónica y asesoría técnica permanente. Paga con MercadoPago o
           tarjetas bancarias.
         </p>
-        <a
-          className="btn"
-          target="_blank"
-          rel="noreferrer"
-          href={whatsappLink(
-            "Hola, me interesa el pirograbador de Pirógrafos Chilenos"
-          )}
-        >
+        <WhatsAppButton message="Hola, me interesa el pirograbador de Pirógrafos Chilenos">
           Escríbenos por WhatsApp
-        </a>
+        </WhatsAppButton>
       </div>
     </section>
   );
