@@ -1,0 +1,22 @@
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 20px 0;
+}
+
+.card-nombre {
+  font-size: 19px;
+}
+
+.card-desc {
+  color: var(--muted);
+  font-size: 14px;
+  flex: 1;
+}
+
+.card-precio {
+  white-space: nowrap;
+  font-size: 16px;
+}

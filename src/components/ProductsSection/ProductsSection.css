@@ -1,0 +1,19 @@
+.productos {
+  list-style: none;
+}
+
+.specs {
+  list-style: none;
+  margin-top: 24px;
+}
+
+.specs li {
+  padding: 8px 0;
+  font-size: 15px;
+}
+
+.specs li::before {
+  content: "—";
+  color: var(--muted);
+  margin-right: 10px;
+}

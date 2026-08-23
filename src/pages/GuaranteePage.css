@@ -1,0 +1,82 @@
+.garantia {
+  padding: 48px 0 96px;
+}
+
+.volver {
+  display: inline-block;
+  margin-bottom: 40px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.volver:hover {
+  color: var(--ink);
+}
+
+.garantia h1 {
+  font-weight: normal;
+  font-size: clamp(32px, 5vw, 48px);
+  letter-spacing: -1px;
+  line-height: 1.15;
+}
+
+.lead {
+  color: var(--muted);
+  max-width: 520px;
+  margin: 20px 0 48px;
+  font-size: 17px;
+}
+
+.garantia-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.garantia-cols h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.garantia ul {
+  list-style: none;
+}
+
+.garantia li {
+  padding: 8px 0;
+  font-size: 15px;
+}
+
+.lista-cubre li::before {
+  content: "✓";
+  color: var(--accent);
+  margin-right: 10px;
+}
+
+.lista-no-cubre li::before {
+  content: "—";
+  color: var(--muted);
+  margin-right: 10px;
+}
+
+.tip {
+  margin-top: 48px;
+  padding: 20px 24px;
+  background: var(--bg-alt);
+  border-radius: 12px;
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 560px;
+}
+
+.cta-row {
+  margin-top: 48px;
+}
+
+@media (max-width: 640px) {
+  .garantia-cols {
+    grid-template-columns: 1fr;
+  }
+}

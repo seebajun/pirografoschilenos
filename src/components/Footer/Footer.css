@@ -1,0 +1,10 @@
+footer {
+  padding: 48px 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+footer .wrap {
+  display: flex;
+  justify-content: space-between;
+}

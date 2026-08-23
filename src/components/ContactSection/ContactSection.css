@@ -1,0 +1,5 @@
+.contacto p {
+  color: var(--muted);
+  max-width: 420px;
+  margin-bottom: 32px;
+}
