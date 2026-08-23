@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      (function () {
+        var segments = window.location.pathname.split("/").filter(Boolean);
+        var root = segments.length ? "/" + segments[0] + "/" : "/";
+        var route =
+          segments[segments.length - 1] === "garantia" ? "#/garantia" : "";
+        window.location.replace(root + route);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

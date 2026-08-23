@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import logo from "../../assets/logo.webp";
 import "./Navbar.css";
 
+const base = import.meta.env.BASE_URL;
+
 const links = [
-  { label: "Producto", href: "/#productos" },
-  { label: "Contacto", href: "/#contacto" },
+  { label: "Producto", href: `${base}#productos` },
+  { label: "Contacto", href: `${base}#contacto` },
 ];
 
 export default function Navbar() {
@@ -35,7 +37,7 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
-            <a className="nav-garantia" href="/garantia">
+            <a className="nav-garantia" href={`${base}#/garantia`}>
               Garantía
             </a>
           </nav>

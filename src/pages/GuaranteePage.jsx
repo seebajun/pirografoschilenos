@@ -24,7 +24,7 @@ export default function GuaranteePage() {
       <Navbar />
       <main className="garantia">
         <div className="wrap">
-          <a className="volver" href="/">
+          <a className="volver" href={import.meta.env.BASE_URL}>
             ← Volver al inicio
           </a>
           <h1>Garantía real de 1 año</h1>
