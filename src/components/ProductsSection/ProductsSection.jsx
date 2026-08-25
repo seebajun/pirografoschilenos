@@ -45,10 +45,10 @@ export default function ProductsSection({ product }) {
             </ul>
             <div className="ficha-cta">
               <div className="ficha-cta-row">
-                <Link to="/comprar" className="btn btn--brasa">Comprar — $95.200</Link>
+                <Link to="/comprar" className="btn btn--brasa">Comprar</Link>
                 <a
                   href="/#garantia"
-                  className="btn btn--ghost"
+                  className="btn"
                   onClick={(e) => {
                     e.preventDefault();
                     const el = document.getElementById("garantia");

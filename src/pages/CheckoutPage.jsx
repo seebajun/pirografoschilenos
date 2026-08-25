@@ -23,11 +23,18 @@ const REGIONES = [
   "Magallanes",
 ];
 
+const PRECIO_UNITARIO = 95200;
+
+function formatCLP(n) {
+  return "$" + n.toLocaleString("es-CL");
+}
+
 function genOrderId() {
   return "PG-" + Date.now().toString(36).toUpperCase() + "-" + Math.random().toString(36).slice(2, 6).toUpperCase();
 }
 
 export default function CheckoutPage() {
+  const [cantidad, setCantidad] = useState(1);
   const [form, setForm] = useState({
     nombre: "",
     email: "",
@@ -42,6 +49,8 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
+
+  const total = cantidad * PRECIO_UNITARIO;
 
   function update(e) {
     const { name, value, type, checked } = e.target;
@@ -72,7 +81,9 @@ export default function CheckoutPage() {
     const payload = {
       orderId,
       producto: "Pirograbador Profesional",
-      precio: 95200,
+      precioUnitario: PRECIO_UNITARIO,
+      cantidad,
+      precio: total,
       moneda: "CLP",
       cliente: { ...form },
       createdAt: new Date().toISOString(),
@@ -114,8 +125,12 @@ export default function CheckoutPage() {
                   <strong>{result.preferenceId}</strong>
                 </div>
                 <div className="success-row">
+                  <span className="mono">Cantidad</span>
+                  <strong>{result.cantidad} × {formatCLP(result.precioUnitario)}</strong>
+                </div>
+                <div className="success-row">
                   <span className="mono">Total</span>
-                  <strong>$95.200 CLP</strong>
+                  <strong>{formatCLP(result.precio)} CLP</strong>
                 </div>
                 <div className="success-row">
                   <span className="mono">Email</span>
@@ -232,11 +247,22 @@ export default function CheckoutPage() {
                 <span className="mono summary-kicker">Resumen</span>
                 <h3>Pirograbador Profesional</h3>
                 <p className="summary-desc">Fabricación chilena · 220V/50Hz · 0–6A · 6 puntas Cantal 1,0 mm · Cable goma alta T° · Fusible 5A</p>
+
+                <div className="qty-selector">
+                  <span className="mono qty-label">Cantidad</span>
+                  <div className="qty-controls">
+                    <button type="button" className="qty-btn" onClick={() => setCantidad((c) => Math.max(1, c - 1))} aria-label="Disminuir cantidad">−</button>
+                    <span className="qty-value" aria-live="polite">{cantidad}</span>
+                    <button type="button" className="qty-btn" onClick={() => setCantidad((c) => Math.min(10, c + 1))} aria-label="Aumentar cantidad">+</button>
+                  </div>
+                  <span className="qty-price">{formatCLP(PRECIO_UNITARIO)} c/u</span>
+                </div>
+
                 <div className="summary-lines">
-                  <div className="summary-line"><span>Pirografo + 6 puntas</span><span>$95.200</span></div>
-                  <div className="summary-line"><span>Despacho nacional</span><span style={{ color: "var(--brasa)", fontWeight: 700 }}>Incluido</span></div>
+                  <div className="summary-line"><span>Pirografo × {cantidad}</span><span>{formatCLP(PRECIO_UNITARIO * cantidad)}</span></div>
+                  <div className="summary-line"><span>Despacho nacional</span><span style={{ color: "var(--led)", fontWeight: 700 }}>Incluido</span></div>
                   <div className="summary-line"><span>Factura electrónica</span><span>Incluida</span></div>
-                  <div className="summary-line summary-line--total"><span>Total</span><span>$95.200 CLP</span></div>
+                  <div className="summary-line summary-line--total"><span>Total</span><span>{formatCLP(total)} CLP</span></div>
                 </div>
                 <div className="summary-foot mono">
                   <span>15 años · 0 garantías</span>

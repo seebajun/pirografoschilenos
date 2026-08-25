@@ -62,7 +62,7 @@ export default function GuaranteeSection() {
 
         <div className="garantia-cta">
           <Link to="/comprar" className="btn btn--brasa">
-            Comprar ahora — $95.200
+            Comprar ahora
           </Link>
           <span className="mono garantia-cta-note">
             Despacho incluido · Factura electrónica · Paga con MercadoPago

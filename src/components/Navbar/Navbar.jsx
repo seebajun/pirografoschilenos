@@ -57,7 +57,7 @@ export default function Navbar() {
               </a>
             ))}
             <Link className="nav-garantia" to="/comprar">
-              Comprar — $95.200
+              Comprar
             </Link>
           </nav>
         </div>
