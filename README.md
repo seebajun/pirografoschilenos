@@ -144,6 +144,27 @@ VITE_API_URL=https://xxxx.execute-api.sa-east-1.amazonaws.com
 
 Sin `VITE_API_URL`, `/comprar` usa el mock local — ideal para diseñar sin AWS.
 
+## Tests
+
+**Stack:** `vitest 4` + `jsdom 30` + `@testing-library/react 16` + `@testing-library/jest-dom` + `@testing-library/user-event`. Config en `vite.config.js:7` (`test.environment: 'jsdom'`, `setupFiles: ['./src/test/setup.js']`, `globals: true`) y setup `src/test/setup.js:1` (`import '@testing-library/jest-dom/vitest'`).
+
+```bash
+npm test          # vitest run — 5 suites / 15 tests (4.6s)
+npm run test:watch # modo watch
+```
+
+**Qué se testea (15 tests):**
+
+| Suite | Archivo | Qué verifica |
+|-------|---------|--------------|
+| `whatsappLink` | `src/data/contact.test.js:1` | `whatsappLink()` genera `https://wa.me/<VITE_WHATSAPP_NUMBER>?text=encodeURIComponent(msg)` con caracteres especiales |
+| `products` | `src/data/products.test.js:1` | `product.nombre/precio/specs` y que specs contienen `Potenciómetro/220V/Cantal` |
+| `Button` | `src/components/Button/Button.test.jsx:1` | `to` → `<Link>`, `to="/#productos"` hace `scrollIntoView` + `pushState`, `href` → `<a>` (usa `MemoryRouter` + mock `Element.prototype.scrollIntoView`) |
+| `HomePage` | `src/pages/HomePage.test.jsx:1` | render hero + ficha + garantía + contacto; `Comprar` sin precio (`queryByText 'Comprar — $95.200'` null); `Ver garantía` con clase `btn` igual que `Ver el producto` (no `btn--ghost`) |
+| `CheckoutPage` | `src/pages/CheckoutPage.test.jsx:1` | render form+resumen+cantidad; `+`/`−` actualiza `ρ = cantidad×95200` (`$95.200→$190.400`, clamp 1–10); validación muestra `Escribe tu nombre completo/Revisa el email`; flujo completo crea orden `PG-...` en `localStorage pirografos_orders` y pantalla `Orden creada — ahora paga` con `cantidad×precioUnitario` |
+
+> Nota jsdom: `Not implemented: Window's scrollTo()` en `HomePage`/`CheckoutPage` es esperado — no afecta asserts.
+
 ## Deploy
 
 **GitHub Pages (actual):** push a `main` → `.github/workflows/deploy.yml` hace `npm ci && npm run build` y `upload-pages-artifact` con `dist/`. Configurado con `vite.config.js: base: '/pirografoschilenos/'` + `404.html` fallback para SPA.
