@@ -36,9 +36,25 @@ export default function Navbar() {
           </Link>
           <nav>
             {links.map((link) => (
-              <Link key={link.to} to={link.to}>
+              <a
+                key={link.to}
+                href={link.to}
+                onClick={(e) => {
+                  const [, hash] = link.to.split("#");
+                  if (!hash) return;
+                  e.preventDefault();
+                  const el = document.getElementById(hash);
+                  if (el) {
+                    el.scrollIntoView({ behavior: "smooth", block: "start" });
+                    history.pushState(null, "", link.to);
+                  } else {
+                    // Si estamos en /comprar u otra ruta, ir al home con hash
+                    window.location.href = link.to;
+                  }
+                }}
+              >
                 {link.label}
-              </Link>
+              </a>
             ))}
             <Link className="nav-garantia" to="/comprar">
               Comprar — $95.200

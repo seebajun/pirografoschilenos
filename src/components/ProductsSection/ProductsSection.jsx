@@ -44,8 +44,23 @@ export default function ProductsSection({ product }) {
               ))}
             </ul>
             <div className="ficha-cta">
-              <Link to="/comprar" className="btn btn--brasa">Comprar — $95.200</Link>
-              <Link to="/#garantia" className="btn btn--ghost">Ver garantía de 1 año</Link>
+              <div className="ficha-cta-row">
+                <Link to="/comprar" className="btn btn--brasa">Comprar — $95.200</Link>
+                <a
+                  href="/#garantia"
+                  className="btn btn--ghost"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const el = document.getElementById("garantia");
+                    if (el) {
+                      el.scrollIntoView({ behavior: "smooth", block: "start" });
+                      history.pushState(null, "", "/#garantia");
+                    }
+                  }}
+                >
+                  Ver garantía de 1 año
+                </a>
+              </div>
               <span className="mono ficha-cta-note">Despacho incluido · Factura electrónica · MercadoPago</span>
             </div>
           </div>
