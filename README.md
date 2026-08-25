@@ -1,5 +1,7 @@
 # Pirógrafos Chilenos — Pirograbador hecho en Chile
 
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react) ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite) ![React Router](https://img.shields.io/badge/React_Router-7-CA4245?logo=react-router) ![Node.js](https://img.shields.io/badge/Node.js-22-339933?logo=node.js) ![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-hosting-222222?logo=github) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI-2088FF?logo=github-actions) ![AWS S3](https://img.shields.io/badge/AWS_S3-orange?logo=amazon-s3) ![CloudFront](https://img.shields.io/badge/CloudFront-CDN-orange?logo=amazon-aws) ![API Gateway](https://img.shields.io/badge/API_Gateway-FF9900?logo=amazon-aws) ![Lambda](https://img.shields.io/badge/Lambda-Node.js-FF9900?logo=awslambda) ![DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?logo=amazon-dynamodb) ![MercadoPago](https://img.shields.io/badge/MercadoPago-Checkout-00B1EA?logo=mercadopago) ![Instrument Sans](https://img.shields.io/badge/Fonts-Instrument_Sans_+%20Fragment_Mono-lightgrey)
+
 > Venta directa de fábrica. 15 años fabricando la herramienta que usan artesanos de Arica a Punta Arenas. Caja plateada, LED naranjo, 220V · 0–6A, 6 puntas Cantal 1.0mm. Despacho incluido + factura electrónica.
 
 **Live:** https://seebajun.github.io/pirografoschilenos/
@@ -51,6 +53,12 @@ API Gateway (HTTP API)
 | DB | `localStorage` | **DynamoDB** (ver esquema abajo) |
 | Pagos | Link WhatsApp + mock MP | **MercadoPago Checkout Pro** (preferenceId server-side) |
 | Secretos | `.env` local | **Secrets Manager** (MP_ACCESS_TOKEN) |
+
+**Tipografía y skills de diseño**
+
+- Usamos el skill **`frontend-design`** de [`anthropics/skills`](https://github.com/anthropics/skills) (`npx skills add ... --skill frontend-design`) como guía de dirección artística: thesis en el hero, paleta anclada al taller, type pairing intencional y *signature* única.
+- **Prueba tipográfica:** se evaluó `Tortilla` (woff2 artesanal en `src/assets/Tortilla.woff2`) como display para evocar lo hecho a mano. A pedido se retiró de **toda la página** (navbar, hero, cards, checkout) y quedó solo el sistema **Instrument Sans** (700 para títulos, 400/500 body) + **Fragment Mono** (11px, 0.14em, uppercase para labels técnicos, precios y badges). No queda ningún `@font-face` de Tortilla en `src/index.css`; el archivo físico permanece pero no se carga (build ya no emite `Tortilla.woff2`).
+- La skill también motivó el cambio de `veta #F7F1E3 → #FCF0D1 + grain`, la eliminación de marcadores `— 01` decorativos y el “riesgo” de la marca quemada / potenciómetro interactivo (luego retirado) — todo documentado en el historial de commits.
 
 ## Estructura
 
