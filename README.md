@@ -1,16 +1,157 @@
-# React + Vite
+# Pirógrafos Chilenos — Pirograbador hecho en Chile
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+> Venta directa de fábrica. 15 años fabricando la herramienta que usan artesanos de Arica a Punta Arenas. Caja plateada, LED naranjo, 220V · 0–6A, 6 puntas Cantal 1.0mm. Despacho incluido + factura electrónica.
 
-Currently, two official plugins are available:
+**Live:** https://seebajun.github.io/pirografoschilenos/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Qué es y qué pretendemos
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Sitio de una sola marca y un solo producto: el **Pirograbador Profesional ($95.200 CLP)**. Sin intermediarios, sin catálogo infinito. La web tiene un único trabajo: llevar a un artesano a confiar y comprar en 2 clics.
 
-## Expanding the Oxlint configuration
+**Fase actual (este repo):** web 100% estática, rápida, optimizada para celular, con flujo de compra completo en el frontend. El pago real hoy es vía MercadoPago y WhatsApp; el backend aún es mock (localStorage) para poder desplegar ya a producción sin infraestructura.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+**Siguiente fase (serverless AWS):** misma web estática, pero cada compra pasa por **API Gateway → Lambda Node.js → DynamoDB**. Nada de servidores, nada que mantener. El objetivo es guardar orden, cliente y estado de pago con trazabilidad completa y escalar a 0 costo cuando no hay ventas.
+
+```
+Navegador (S3 + CloudFront)
+   │  POST /create-preference  {datos cliente + carrito}
+   ▼
+API Gateway (HTTP API)
+   ├─► Lambda: create-preference (Node.js)
+   │     ├─ valida, genera orderId PG-XXX
+   │     ├─ crea preferencia MercadoPago (access_token en Secrets Manager)
+   │     └─ PutItem DynamoDB → Orders + Payments + Customers
+   │     └─ responde {orderId, preferenceId, init_point}
+   │            ▼
+   │     redirect a MercadoPago checkout
+   │
+   └─► Lambda: mp-webhook (POST /mp-webhook)
+         └─ valida firma MP → UpdateItem payment status → Orders paid/shipped
+```
+
+## Stack
+
+**Frontend**
+
+- **React 19 + Vite 8 + React Router 7** — SPA con URLs limpias (`BrowserRouter` + `BASE_URL`)
+- **CSS puro con design tokens** — sin Tailwind. Paleta taller: `veta #FCF0D1` / `carbon #14100E` / `plata #C9D1DB` / `led naranjo #FF6B00` + grain noise para evitar el cream genérico
+- **Tipografía:** `Instrument Sans` (body/display) + `Fragment Mono` (labels técnicos)
+- **Assets:** `sharp` + `pdf-to-img` para fotos optimizadas (`.webp`)
+- **Lint:** `oxlint` — 0 warnings en CI
+
+**Infra (actual y prevista)**
+
+| Capa | Actual | Previsto AWS |
+|------|--------|--------------|
+| Hosting web | **GitHub Pages** (`/pirografoschilenos/` via Actions) | **S3 + CloudFront** (mismo `dist/`) |
+| API | — (mock) | **API Gateway HTTP API** |
+| Compute | — | **Lambda Node.js 22** (`create-preference`, `mp-webhook`, `get-order`) |
+| DB | `localStorage` | **DynamoDB** (ver esquema abajo) |
+| Pagos | Link WhatsApp + mock MP | **MercadoPago Checkout Pro** (preferenceId server-side) |
+| Secretos | `.env` local | **Secrets Manager** (MP_ACCESS_TOKEN) |
+
+## Estructura
+
+```
+src/
+  App.jsx                // / , /comprar , /garantia
+  pages/
+    HomePage.jsx         // Hero + Productos + GuaranteeSection + Contacto
+    CheckoutPage.jsx     // /comprar — formulario + resumen + mock MP
+    GuaranteePage.jsx    // /garantia legacy (también sección en home)
+  components/
+    Hero/                // burn-divider, caja plateada, LED naranjo
+    ProductsSection/     // ficha técnica + mosaico 2x2 plata
+    GuaranteeSection/    // qué cubre / qué no cubre
+    Card/, Navbar/, ContactSection/, Footer/
+  data/
+    products.js          // specs, precio, nombre
+    contact.js           // whatsappLink()
+  assets/photos/         // pirografo_01.webp + trabajos piro
+```
+
+**Rutas**
+
+- `/` — hero + producto + garantía + contacto
+- `/comprar` — checkout completo (nombre, email, WhatsApp, RUT opcional, dirección, comuna, región, notas). Valida, genera `orderId PG-XXXX` y `preferenceId MP-MOCK-...`, guarda en `localStorage` hasta tener Lambda.
+- `/#productos`, `/#garantia`, `/#contacto` — anchors con `ScrollManager`
+- `/garantia` — página legacy, redirige a `/#garantia`
+
+## Flujo de compra (hoy → mañana)
+
+**Hoy (estático):**
+
+1. Usuario llena `/comprar` → `validate()` inline (mensajes en voz activa, no “Requerido”)
+2. `genOrderId()` + payload → `localStorage pirografos_orders`
+3. Pantalla éxito con `init_point` mock y bloque `Payload que enviará a Lambda (debug)` para testear backend sin tocar frontend
+
+**Mañana (Lambda):**
+
+```js
+// POST /create-preference
+{ nombre, email, telefono, rut, direccion, comuna, region, notas }
+// → Lambda responde
+{ orderId, preferenceId, init_point: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=..." }
+// → frontend hace window.location = init_point
+```
+
+## DynamoDB — esquema previsto
+
+**Orders** — PK `orderId` (S `PG-XXXX`), GSI `email-index` (PK `email`, SK `createdAt`)
+```json
+{ "orderId": "PG-...", "email": "camila@...", "total": 95200, "moneda": "CLP",
+  "estado": "pending_payment | paid | shipped", "preferenceId": "MP-...", "paymentId": "...",
+  "cliente": { "nombre","rut","direccion","comuna","region","telefono" }, "createdAt": "..." }
+```
+
+**Payments** — PK `preferenceId`, SK `paymentId`
+```json
+{ "preferenceId": "MP-...", "paymentId": "123456", "token": "opaco", "estado": "approved", "raw": {...} }
+```
+
+**Customers** — PK `email`
+```json
+{ "email": "camila@...", "nombre": "Camila Rojas", "telefono": "+56...", "direcciones": [...] }
+```
+
+Tokens de MP **nunca** en el cliente. Solo en Lambda + DynamoDB.
+
+## Desarrollo local
+
+```bash
+npm ci
+npm run dev      # http://localhost:5173/pirografoschilenos/
+npm run build    # → dist/
+npm run lint     # oxlint
+```
+
+**Variables `.env`** (ver `.env.example`):
+
+```
+VITE_WHATSAPP_NUMBER=569XXXXXXXX
+VITE_API_URL=https://xxxx.execute-api.sa-east-1.amazonaws.com
+```
+
+Sin `VITE_API_URL`, `/comprar` usa el mock local — ideal para diseñar sin AWS.
+
+## Deploy
+
+**GitHub Pages (actual):** push a `main` → `.github/workflows/deploy.yml` hace `npm ci && npm run build` y `upload-pages-artifact` con `dist/`. Configurado con `vite.config.js: base: '/pirografoschilenos/'` + `404.html` fallback para SPA.
+
+Migración a **S3 + CloudFront** es 1:1: mismo `dist/` + invalidación de CloudFront en CI. API queda en `api.pirografos.cl` (API Gateway) para no mezclar orígenes.
+
+## Roadmap
+
+- [x] Landing + ficha técnica + garantía + WhatsApp
+- [x] `/comprar` con validación y resumen (mock)
+- [x] Paleta plateada + LED naranjo, sin `Tortilla`
+- [ ] `POST /create-preference` Lambda + DynamoDB
+- [ ] `POST /mp-webhook` + actualización estado
+- [ ] Panel admin lectura `/get-order?orderId=PG-...` (Lambda + GSI email)
+- [ ] S3 + CloudFront + dominio + ACM
+
+---
+
+Hecho en taller, no en template. 15 años, 0 garantías cobradas, +1.000 clientes.
