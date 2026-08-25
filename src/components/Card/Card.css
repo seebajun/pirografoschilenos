@@ -1,22 +1,44 @@
 .card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 16px;
-  padding: 20px 0;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 8px 24px rgba(20,16,14,0.06);
 }
-
+.card-kicker { color: var(--brasa) !important; font-size: 10px !important; }
 .card-nombre {
-  font-size: 19px;
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--corteza);
+  margin-top: 6px;
 }
-
 .card-desc {
   color: var(--muted);
   font-size: 14px;
-  flex: 1;
+  line-height: 1.5;
+  margin-top: 8px;
 }
-
+.card-precio-box {
+  background: var(--veta);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.card-precio-label { color: var(--ceniza) !important; font-size: 10px !important; }
 .card-precio {
-  white-space: nowrap;
-  font-size: 16px;
+  font-family: 'Fragment Mono', monospace;
+  font-size: 28px;
+  letter-spacing: -0.04em;
+  color: var(--corteza);
+  line-height: 1;
 }
+.card-precio-sub { font-size: 12px; color: var(--muted); }

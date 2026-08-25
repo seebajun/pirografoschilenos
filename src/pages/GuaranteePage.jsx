@@ -28,15 +28,25 @@ export default function GuaranteePage() {
           <Link className="volver" to="/">
             ← Volver al inicio
           </Link>
-          <h1>Garantía real de 1 año</h1>
+          <h1>
+            Garantía real <span>de 1 año</span>
+          </h1>
           <p className="lead">
             Llevamos más de 15 años fabricando y jamás hemos tenido una
             garantía cobrada. Igual te la respaldamos: un año desde la fecha
             de compra, con factura electrónica.
           </p>
 
-          <div className="garantia-cols">
+          <div className="garantia-hero-card">
+            <div className="garantia-star">◐</div>
             <div>
+              <strong>0 garantías en 15 años.</strong>
+              <p>Más de 1.000 clientes de Arica a Punta Arenas. Cuando fabricas tú, respondes tú.</p>
+            </div>
+          </div>
+
+          <div className="garantia-cols">
+            <div className="garantia-col garantia-col--ok">
               <h2>Qué cubre</h2>
               <ul className="lista-cubre">
                 {cubre.map((item) => (
@@ -44,7 +54,7 @@ export default function GuaranteePage() {
                 ))}
               </ul>
             </div>
-            <div>
+            <div className="garantia-col garantia-col--no">
               <h2>Qué no cubre</h2>
               <ul className="lista-no-cubre">
                 {noCubre.map((item) => (
@@ -55,9 +65,10 @@ export default function GuaranteePage() {
           </div>
 
           <div className="tip">
-            <strong>Consejo del fabricante:</strong> trabaja en sesiones de
+            <span className="tip-icon">◑</span>
+            <span><strong>Consejo del fabricante:</strong> trabaja en sesiones de
             máximo 30 minutos a temperatura máxima e intercambia puntas. Así
-            alargas la vida útil de cada una.
+            alargas la vida útil de cada una.</span>
           </div>
 
           <div className="cta-row">

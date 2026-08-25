@@ -5,6 +5,7 @@ import "./Navbar.css";
 
 const links = [
   { label: "Producto", to: "/#productos" },
+  { label: "Garantía", to: "/#garantia" },
   { label: "Contacto", to: "/#contacto" },
 ];
 
@@ -26,18 +27,21 @@ export default function Navbar() {
       <div className="nav-spacer" aria-hidden="true" />
       <header className={scrolled ? "scrolled" : undefined}>
         <div className="wrap">
-          <span className="logo">
+          <Link to="/" className="logo">
             <img src={logo} alt="Logo de Pirógrafos Chilenos" />
-            Pirógrafos Chilenos
-          </span>
+            <span className="logo-text">
+              Pirógrafos Chilenos
+              <small>Hecho en Chile · 2010</small>
+            </span>
+          </Link>
           <nav>
             {links.map((link) => (
               <Link key={link.to} to={link.to}>
                 {link.label}
               </Link>
             ))}
-            <Link className="nav-garantia" to="/garantia">
-              Garantía
+            <Link className="nav-garantia" to="/comprar">
+              Comprar — $95.200
             </Link>
           </nav>
         </div>
